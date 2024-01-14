@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // DATA /////////////////////////////////////
+
+        const players = [{
+                name: 'Bernard',
+                email: 'bernard@example.com'
+            }, {
+                name: 'Youchi',
+                email: 'youchi@example.com'
+            }, {
+                name: 'Yenting',
+                email: 'yenting@example.com'
+            }, {
+                name: 'Angela',
+                email: 'angela@example.com'
+            }, {
+                name: 'Yvonne',
+                email: 'yvonne@example.com'
+            }, {
+                name: 'Ellen',
+                email: 'ellen@example.com'
+            }, {
+                name: 'Walter',
+                email: 'walter@example.com'
+            }, {
+                name: 'Kevin',
+                email: 'kevin@example.com'
+            }, {
+                name: 'Tim',
+                email: 'tim@example.com'
+            }, {
+                name: 'Russell',
+                email: 'russell@example.com'
+            }]
+            //players[0].ticket = 'XD112233'
+            //console.log(players);
+
+        // 用來檢查彩券號碼是否重複
+        const tickets = []
+
+        // 1.產生彩券號碼
+        function createTicket() {
+            // write your code here
+            let letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+            let ticket = ''
+            ticket += letters[Math.floor(Math.random() * 26)]
+            ticket += letters[Math.floor(Math.random() * 26)]
+            ticket += Math.floor(Math.random() * 10)
+            ticket += Math.floor(Math.random() * 10)
+            ticket += Math.floor(Math.random() * 10)
+            ticket += Math.floor(Math.random() * 10)
+            return ticket
+        }
+        //let ticket = createTicket()
+        // console.log(ticket)
+
+        // 2.產生 10 個彩券號碼（因為有 10 位抽獎者），將號碼放入 tickets 陣列 ，並檢查號碼是否重複，若無則將號碼加入 players 陣列
+        for (let i = 0; i < players.length; i++) {
+            // 呼叫產生彩券號碼的函式
+            let ticket = createTicket()
+            tickets.push(ticket)
+                // 這邊還待商榷，好像有點奇怪          
+            if (tickets.includes(ticket)) {
+                tickets.splice(i, 1)
+            } else {
+                players[i].ticket = tickets[i]
+            }
+        }
+        console.log(tickets)
+        console.log(players)
+
+        // 3.檢查重複，用 Set 方式（不用）
+        // function hasRepeat(tickets) {
+        //     return new Set(tickets).size !== tickets.length;
+        // }
+        // console.log(hasRepeat(tickets)) //false 表示沒有重複
+
+        // 3-1.檢查重複，用 includes 的方式，已合併
+        // for (let i = 0; i < players.lenght; i++) {
+        //     // if (tickets.includes(ticket[i])) {
+        //     //     tickets.splice(i, 1)
+        //     // } else {
+
+        //     //     players[i].ticket = ticket[i]
+        //     // }
+        //     console.log(tickets.includes(ticket[i]))
+        // }
+        // console.log(players)
+
+        // 3.抽出幸運兒函式
+        function drawWinner(players, prize) {
+            // 產生隨機數來抽獎
+            let randomNum = Math.floor(Math.random() * 10)
+            let lucky = players[randomNum]
+                // 刪除已經被抽出的人
+            players.splice(randomNum, 1)
+            return lucky
+        }
+        // 2. draw 3 winners and announce the results
+        let lucky = drawWinner(players, '頭獎')
+            //console.log(lucky)
+            // drawWinner(players, '貮獎')
+            // drawWinner(players, '叁獎')
+
+        // 4.加密名字的函式
+        // 將得獎者作為參數傳入加密名字的函式
+        function encodeName(lucky) {
+            // 取出名字的前兩個字母
+            let encodeName = lucky.name.slice(0, 2)
+                // 以循環遍歷的方式為第 3 個開始的字母加上 * 
+            for (let i = 2; i < lucky.name.length; i++) {
+                encodeName += '*'
+            }
+            return encodeName
+        }
+
+        // 加密郵件的函式
+        function encodeEmail(lucky) {
+            // 1.把 @ 之後的字串提取出來
+            let end = lucky.email.slice(lucky.email.indexOf('@'))
+                // console.log(end) //@example.com
+                // 2.把 @ 之前的字串提出出來
+            let begin = lucky.email.slice(0, lucky.email.indexOf('@'))
+                // console.log(begin) // bernard
+                // 3.加工字串
+            let beginSliced = begin.slice(0, Math.floor(begin.length / 2))
+                //console.log(beginSliced) // ber
+            beginSliced += '...'
+                // 4.拼接字串
+            email = beginSliced + end
+            return email
+        }
+
+        // 輸出結果函式
+        function announceMsg(winner, prize) {
+            // 請新增 encodeName 和 encodeEmail 函式進行字串處理
+            let eName = encodeName(lucky)
+            let eEmail = encodeEmail(lucky)
+            console.log(`${winner.ticket} | ${encodeName(winner.eName)} | ${encodeEmail(winner.eEmail)} | ${prize}`)
+        }
+        announceMsg(lucky, '頭獎')
+            // add more functions here
+
+        // EXECUTING /////////////////////////////////////
+
+        // 1. each player gets a lottery ticket
+        // write your code here
+
+
+
+
+        // 3. the rest of players get participation award
+        // 提示：抽出得獎者後，記得要呼叫 announceMsg 在 console 印出得獎者
+        // write your code here
+    </script>
+</body>
+
+</html>
